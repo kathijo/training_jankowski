@@ -2,4 +2,4 @@
 
 these are my minor change_tdc
 
-Those changes are great, here are more.
+Those changes are great, here are more. I still like your changes no matter what other people say!
