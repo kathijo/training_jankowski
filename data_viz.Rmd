@@ -1,0 +1,54 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading packages
+
+```{r}
+library(leaflet)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(scales)
+library(knitr)
+```
+
+## Load data
+
+```{r}
+data_url <- "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/urn%3Auuid%3Af119a05b-bbe7-4aea-93c6-85434dcb1c5e"
+
+esc <- tryCatch(
+    read.csv("data/escapement.csv", stringsAsFactors = FALSE),
+    error=function(cond) {
+        message(paste("Escapement file does not seem to exist, so get it from the KNB."))
+        esc <- read.csv(url(data_url, method = "libcurl"), stringsAsFactors = FALSE)
+        return(esc)
+    }
+)
+
+head(esc)
+```
+
+## Analysis 
+
+- Annual escapement by species & region
+
+```{r}
+esc_sum = esc %>% separate(sampleDate, c("Year", "Month", "Day"), sep="-") %>% mutate(Year = as.numeric(Year)) %>% 
+  
+  rename(Region = SASAP.Region) %>% group_by(Region, Species, Year) %>% summarise(escapement = sum(DailyCount))
+
+head(esc_sum)
+```
+
+
+```{r}
+
+```
+
